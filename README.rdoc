@@ -1,0 +1,54 @@
+= EventNotifier
+
+Listen for database events like create new record, updated existing or destroy & notify. These events can be used with ActionController::Live or Server Sent Events (SSE)
+
+== Installation
+
+Simply add event_notifier gem to your Gemfile.
+
+    gem 'event_notifier'
+
+& from terminal, run:
+
+    bundle install
+    
+
+== Usage
+
+    class Account < ActiveRecord::Base
+        include EventNotifier
+
+        .....
+
+    end
+
+
+and inside your controller / SSE or wherever you want to use database events,
+
+    class AccountsController < ApplicationController
+
+        def sse_live
+            Account.on_event do |_event|
+                sse.write(_event) # or whatever you want to do when a new account is created or existing account object is updated or destroyed
+            end
+        end
+    end
+                
+
+And now you are ready to track database event notifications.
+
+p.s. Currently only create/update & destory events are handled
+
+
+== TODO
+
+* Configuration options for events to handle
+* MongoDB support
+
+== Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Added some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
